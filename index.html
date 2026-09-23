@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Code Detective</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #1f2937;
+}
+
+/* HEADER */
+
+header {
+    background: linear-gradient(135deg, #111827, #312e81);
+    color: white;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #a5b4fc;
+}
+
+.score {
+    background: rgba(255,255,255,0.12);
+    padding: 10px 18px;
+    border-radius: 20px;
+}
+
+/* MAIN */
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 35px auto;
+}
+
+/* HERO */
+
+.hero {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+}
+
+.hero h1 {
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    color: #6b7280;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+.badge {
+    display: inline-block;
+    background: #e0e7ff;
+    color: #3730a3;
+    padding: 7px 14px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* SELECT */
+
+.controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+select {
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: white;
+    font-size: 15px;
+}
+
+/* CARD */
+
+.challenge {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.challenge-header h2 {
+    font-size: 24px;
+}
+
+.difficulty {
+    background: #dcfce7;
+    color: #166534;
+    padding: 7px 13px;
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* TASK */
+
+.task {
+    background: #f9fafb;
+    border-left: 5px solid #4f46e5;
+    padding: 18px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    line-height: 1.6;
+}
+
+.task strong {
+    color: #111827;
+}
+
+/* CODE */
+
+.code-title {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.code-box {
+    background: #111827;
+    color: #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    font-family: Consolas, monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    white-space: pre;
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 180px;
+    resize: vertical;
+    background: #0f172a;
+    color: #e5e7eb;
+    border: none;
+    border-radius: 12px;
+    padding: 18px;
+    font-family: Consolas, monospace;
+    font-size: 15px;
+    outline: none;
+}
+
+/* BUTTONS */
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+button {
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.check {
+    background: #4f46e5;
+    color: white;
+}
+
+.hint {
+    background: #f59e0b;
+    color: white;
+}
+
+.next {
+    background: #10b981;
+    color: white;
+    display: none;
+}
+
+/* FEEDBACK */
+
+.feedback {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 10px;
+    display: none;
+    line-height: 1.6;
+}
+
+.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.hint-box {
+    background: #fef3c7;
+    color: #92400e;
+    margin-top: 15px;
+}
+
+/* PROGRESS */
+
+.progress-section {
+    margin-top: 25px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.progress {
+    width: 100%;
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 20%;
+    height: 100%;
+    background: #4f46e5;
+    transition: 0.4s;
+}
+
+/* FEATURES */
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.feature {
+    background: white;
+    padding: 22px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.feature-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.feature h3 {
+    margin-bottom: 7px;
+}
+
+.feature p {
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    color: #6b7280;
+    padding: 30px;
+    margin-top: 30px;
+}
+
+/* MOBILE */
+
+@media(max-width: 800px) {
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        padding: 18px 5%;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .challenge {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        🕵️ Code <span>Detective</span>
+    </div>
+
+    <div class="score">
+        ⭐ Ұпай: <strong id="score">0</strong>
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="badge">
+            DIGITAL LEARNING PLATFORM
+        </div>
+
+        <h1>Қатені тап. Себебін түсін. Кодты түзет.</h1>
+
+        <p>
+            Code Detective — оқушылардың бағдарламалау және
+            алгоритмдік ойлау дағдыларын қате кодтарды талдау
+            арқылы дамытуға арналған интерактивті оқу платформасы.
+        </p>
+
+    </section>
+
+
+    <!-- CONTROLS -->
+
+    <div class="controls">
+
+        <select id="language" onchange="changeLanguage()">
+            <option value="python">Python</option>
+            <option value="cpp">C++</option>
+        </select>
+
+        <select id="level" onchange="changeLevel()">
+            <option value="beginner">🟢 Beginner</option>
+            <option value="medium">🟡 Intermediate</option>
+            <option value="advanced">🔴 Advanced</option>
+        </select>
+
+    </div>
+
+
+    <!-- CHALLENGE -->
+
+    <section class="challenge">
+
+        <div class="challenge-header">
+
+            <h2 id="taskTitle">
+                🐞 1-тапсырма
+            </h2>
+
+            <div class="difficulty" id="difficulty">
+                Beginner
+            </div>
+
+        </div>
+
+
+        <div class="task">
+
+            <strong>Мәселе:</strong>
+
+            <p id="taskText">
+                Бағдарлама қолданушының жасын қабылдап,
+                оның кәмелетке толғанын анықтауы керек.
+                Бірақ кодта қате бар. Қатені тауып түзет.
+            </p>
+
+        </div>
+
+
+        <div class="code-title">
+            ❌ Қате коды:
+        </div>
+
+        <div class="code-box" id="buggyCode"></div>
+
+
+        <div class="code-title">
+            ✏️ Түзетілген кодты осында жаз:
+        </div>
+
+        <textarea id="answer"
+placeholder="Қатені түзетіп, кодты осында жазыңыз..."></textarea>
+
+
+        <div class="buttons">
+
+            <button class="check" onclick="checkAnswer()">
+                🔍 Жауабымды тексеру
+            </button>
+
+            <button class="hint" onclick="showHint()">
+                💡 Кеңес алу
+            </button>
+
+            <button class="next" id="nextButton" onclick="nextTask()">
+                ➡️ Келесі тапсырма
+            </button>
+
+        </div>
+
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="feedback hint-box" id="hintBox"></div>
+
+
+        <!-- PROGRESS -->
+
+        <div class="progress-section">
+
+            <div class="progress-info">
+
+                <span>Прогресс</span>
+
+                <span id="progressText">
+                    1 / 5
+                </span>
+
+            </div>
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="progressBar">
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FEATURES -->
+
+    <section class="features">
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🐞
+            </div>
+
+            <h3>Қате код</h3>
+
+            <p>
+                Оқушы дайын дұрыс кодты көшірмейді.
+                Ол қатені өзі анықтайды.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                💡
+            </div>
+
+            <h3>AI кеңесші</h3>
+
+            <p>
+                Оқушы қиналған кезде дайын жауап емес,
+                бағыттаушы кеңес алады.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                📈
+            </div>
+
+            <h3>Прогресс</h3>
+
+            <p>
+                Дұрыс орындалған тапсырмалар үшін
+                ұпай беріледі және оқушы өз прогресін көреді.
+            </p>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<footer>
+
+    🕵️ Code Detective — информатика пәніне арналған
+    авторлық педагогикалық идея
+
+</footer>
+
+
+<script>
+
+/* =========================
+   TASK DATABASE
+========================= */
+
+const tasks = {
+
+    python: {
+
+        beginner: [
+
+            {
+                title: "🐞 1-тапсырма",
+                text: "Бағдарлама қолданушының жасын қабылдап, оның кәмелетке толғанын анықтауы керек.",
+                code:
+`age = input("Жасыңызды енгізіңіз: ")
+
+if age >= 18:
+    print("Сіз кәмелетке толдыңыз")
+else:
+    print("Сіз кәмелетке толмағансыз")`,
+                answer: "int",
+                hint: "input() арқылы алынған мән қандай типте болады? Санмен салыстыру алдында типті тексер.",
+                explanation: "input() мәтіндік мән қайтарады. Сондықтан оны int() арқылы санға айналдыру қажет."
+            },
+
+            {
+                title: "🐞 2-тапсырма",
+                text: "Бағдарлама екі санды қосып, нәтижесін экранға шығаруы керек.",
+                code:
+`a = input("a = ")
+b = input("b = ")
+
+result = a + b
+
+print(result)`,
+                answer: "int",
+                hint: "Егер a=10 және b=5 болса, нәтиже 105 болып кетуі мүмкін. Неліктен?",
+                explanation: "input() мәтін қайтарады. Сондықтан сандарды int() арқылы түрлендіру керек."
+            },
+
+            {
+                title: "🐞 3-тапсырма",
+                text: "Бағдарлама 1-ден 5-ке дейінгі сандарды шығару керек.",
+                code:
+`for i in range(1, 5):
+    print(i)`,
+                answer: "range(1, 6)",
+                hint: "range() функциясының соңғы саны есепке кіре ме?",
+                explanation: "range(1, 5) 1,2,3,4 сандарын береді. 5 санын шығару үшін range(1,6) қолдану керек."
+            },
+
+            {
+                title: "🐞 4-тапсырма",
+                text: "Бағдарлама санның жұп немесе тақ екенін анықтауы керек.",
+                code:
+`number = int(input("Сан: "))
+
+if number % 2 == 1:
+    print("Жұп сан")
+else:
+    print("Тақ сан")`,
+                answer: "% 2 == 0",
+                hint: "Жұп санды 2-ге бөлгенде қалдық қанша болады?",
+                explanation: "Жұп санды 2-ге бөлгендегі қалдық 0 болады."
+            },
+
+            {
+                title: "🐞 5-тапсырма",
+                text: "Бағдарлама адамның жасын тексеруі керек.",
+                code:
+`age = 20
+
+if age > 18:
+    print("Кіруге болады")
+else:
+    print("Кіруге болмайды")`,
+                answer: ">= 18",
+                hint: "18 жастағы адам да кіре алуы керек болса, қандай салыстыру белгісі қажет?",
+                explanation: "18 жасты да қосу үшін >= операторы қолданылады."
+            }
+
+        ]
+
+    },
+
+    cpp: {
+
+        beginner: [
+
+            {
+                title: "🐞 1-тапсырма",
+                text: "Бағдарлама екі санды қосуы керек.",
+                code:
+`#include <iostream>
+using namespace std;
+
+int main() {
+
+    int a, b;
+
+    cin >> a >> b;
+
+    cout << a - b;
+
+    return 0;
+}`,
+                answer: "a + b",
+                hint: "Тапсырмада екі санды қосу керек. Кодта қандай арифметикалық оператор қолданылған?",
+                explanation: "Қосу үшін + операторы қолданылуы керек."
+            },
+
+            {
+                title: "🐞 2-тапсырма",
+                text: "Бағдарлама адамның жасын тексеруі керек.",
+                code:
+`#include <iostream>
+using namespace std;
+
+int main() {
+
+    int age;
+    cin >> age;
+
+    if (age = 18)
+        cout << "Adult";
+
+    return 0;
+}`,
+                answer: "age == 18",
+                hint: "if шартында = және == операторларының айырмашылығы қандай?",
+                explanation: "== салыстыру үшін, ал = мән меншіктеу үшін қолданылады."
+            },
+
+            {
+                title: "🐞 3-тапсырма",
+                text: "1-ден 5-ке дейінгі сандарды шығару керек.",
+                code:
+`#include <iostream>
+using namespace std;
+
+int main() {
+
+    for(int i = 1; i < 5; i++)
+        cout << i << " ";
+
+    return 0;
+}`,
+                answer: "i <= 5",
+                hint: "5 саны да экранға шығуы керек.",
+                explanation: "i < 5 кезінде 5 шығарылмайды. i <= 5 қолдану керек."
+            }
+
+        ]
+
+    }
+
+};
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let currentLanguage = "python";
+let currentLevel = "beginner";
+
+let currentTask = 0;
+
+let score = 0;
+
+let solved = false;
+
+
+/* =========================
+   LOAD TASK
+========================= */
+
+function loadTask() {
+
+    const taskList =
+        tasks[currentLanguage][currentLevel];
+
+    if (!taskList || taskList.length === 0) {
+        alert("Бұл деңгейге әзірге тапсырма қосылмаған.");
+        return;
+    }
+
+    if (currentTask >= taskList.length) {
+        currentTask = 0;
+    }
+
+    const task = taskList[currentTask];
+
+    document.getElementById("taskTitle").innerText =
+        task.title;
+
+    document.getElementById("taskText").innerText =
+        task.text;
+
+    document.getElementById("buggyCode").innerText =
+        task.code;
+
+    document.getElementById("answer").value = "";
+
+    document.getElementById("feedback").style.display =
+        "none";
+
+    document.getElementById("hintBox").style.display =
+        "none";
+
+    document.getElementById("nextButton").style.display =
+        "none";
+
+    solved = false;
+
+    updateProgress();
+
+}
+
+
+/* =========================
+   CHECK ANSWER
+========================= */
+
+function checkAnswer() {
+
+    if (solved) {
+        return;
+    }
+
+    const task =
+        tasks[currentLanguage][currentLevel][currentTask];
+
+    const userAnswer =
+        document.getElementById("answer").value
+        .toLowerCase()
+        .replace(/\s/g, "");
+
+    const correctAnswer =
+        task.answer
+        .toLowerCase()
+        .replace(/\s/g, "");
+
+    const feedback =
+        document.getElementById("feedback");
+
+    if (userAnswer.includes(correctAnswer)) {
+
+        score += 10;
+
+        document.getElementById("score").innerText =
+            score;
+
+        feedback.className =
+            "feedback success";
+
+        feedback.innerHTML =
+            "🎉 <strong>Дұрыс!</strong><br><br>" +
+            task.explanation;
+
+        feedback.style.display =
+            "block";
+
+        document.getElementById("nextButton").style.display =
+            "inline-block";
+
+        solved = true;
+
+    } else {
+
+        feedback.className =
+            "feedback error";
+
+        feedback.innerHTML =
+            "❌ Әзірге дұрыс емес.<br><br>" +
+            "Қатені тағы бір рет талдап көр. " +
+            "Қажет болса, <strong>«Кеңес алу»</strong> батырмасын пайдалан.";
+
+        feedback.style.display =
+            "block";
+
+    }
+
+}
+
+
+/* =========================
+   HINT
+========================= */
+
+function showHint() {
+
+    const task =
+        tasks[currentLanguage][currentLevel][currentTask];
+
+    const hintBox =
+        document.getElementById("hintBox");
+
+    hintBox.innerHTML =
+        "💡 <strong>AI Detective кеңесі:</strong><br><br>" +
+        task.hint;
+
+    hintBox.style.display =
+        "block";
+
+}
+
+
+/* =========================
+   NEXT TASK
+========================= */
+
+function nextTask() {
+
+    const taskList =
+        tasks[currentLanguage][currentLevel];
+
+    currentTask++;
+
+    if (currentTask >= taskList.length) {
+
+        alert(
+            "🎉 Деңгей аяқталды!\n\n" +
+            "Сіздің ұпайыңыз: " + score
+        );
+
+        currentTask = 0;
+    }
+
+    loadTask();
+
+}
+
+
+/* =========================
+   LANGUAGE
+========================= */
+
+function changeLanguage() {
+
+    currentLanguage =
+        document.getElementById("language").value;
+
+    currentTask = 0;
+
+    loadTask();
+
+}
+
+
+/* =========================
+   LEVEL
+========================= */
+
+function changeLevel() {
+
+    currentLevel =
+        document.getElementById("level").value;
+
+    currentTask = 0;
+
+    const difficulty =
+        document.getElementById("difficulty");
+
+    if (currentLevel === "beginner") {
+
+        difficulty.innerText =
+            "Beginner";
+
+        difficulty.style.background =
+            "#dcfce7";
+
+        difficulty.style.color =
+            "#166534";
+
+    }
+
+    if (currentLevel === "medium") {
+
+        difficulty.innerText =
+            "Intermediate";
+
+        difficulty.style.background =
+            "#fef3c7";
+
+        difficulty.style.color =
+            "#92400e";
+
+    }
+
+    if (currentLevel === "advanced") {
+
+        difficulty.innerText =
+            "Advanced";
+
+        difficulty.style.background =
+            "#fee2e2";
+
+        difficulty.style.color =
+            "#991b1b";
+
+    }
+
+    loadTask();
+
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+function updateProgress() {
+
+    const taskList =
+        tasks[currentLanguage][currentLevel];
+
+    const total =
+        taskList.length;
+
+    const current =
+        currentTask + 1;
+
+    document.getElementById("progressText").innerText =
+        current + " / " + total;
+
+    const percent =
+        (current / total) * 100;
+
+    document.getElementById("progressBar").style.width =
+        percent + "%";
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadTask();
+
+</script>
+
+</body>
+</html>
